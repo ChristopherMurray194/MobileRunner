@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
 	void Update ()
     {
         MoveForward();
-
+        
         if(Input.GetKeyDown(KeyCode.A))
             MoveLeft();
 

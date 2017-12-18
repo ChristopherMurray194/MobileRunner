@@ -8,18 +8,18 @@ public class MainCamera : MonoBehaviour
     public float followSpeed = 5f;
     /// <summary> The target for the camera to follow </summary>
     public Transform target;
-    /// <summary> Distance to maintain from the target </summary>
+    /// <summary> Distance vector to maintain from the target </summary>
     Vector3 distance;
 
     Camera cam;
     
-	void Start ()
+	void Start()
     {
         distance = transform.position - target.position;
         cam = GetComponent<Camera>();
 	}
 	
-	void Update ()
+	void Update()
     {
         FollowPlayer();
 	}
