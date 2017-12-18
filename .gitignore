@@ -1,0 +1,15 @@
+Library/**
+Build/**
+Temp/**
+
+Assets/PolygonVikings/**
+Assets/SimpleForestAnimal/**
+Assets/SimpleFX/**
+
+Assets/PolygonVikings.meta
+Assets/SimpleForestAnimal.meta
+Assets/SimpleFX.meta
+
+*.csproj
+*.sln
+.vs/**
