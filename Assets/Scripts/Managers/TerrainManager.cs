@@ -17,6 +17,7 @@ public class TerrainManager : MonoBehaviour
     void Start()
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+        lastTile = floorTiles[floorTiles.Count - 1];
     }
 
     void Update()
@@ -39,7 +40,7 @@ public class TerrainManager : MonoBehaviour
                 Vector3 temp = floorTiles[0].transform.position;
                 temp.z = newZ;
                 floorTiles[0].transform.position = temp;
-                // Store the tile as the current tile at the end of the list
+                // Store the tile as the last tile in the list
                 lastTile = floorTiles[0];
                 // Move the tile to the end of the list
                 floorTiles.Add(floorTiles[0]);
