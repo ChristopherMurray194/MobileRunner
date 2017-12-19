@@ -34,9 +34,9 @@ public class HazardManager : MonoBehaviour
     void SpawnHazard()
     {
         // Get a random hazard
-        int hazardIndex = Random.Range(0, hazards.Length - 1);
+        int hazardIndex = Random.Range(0, hazards.Length);
         // Get a random lane
-        int laneIndex = Random.Range(0, lanes.Length - 1);
+        int laneIndex = Random.Range(0, lanes.Length);
         
         GameObject hazard = GameObject.Instantiate(hazards[hazardIndex]);
         Vector3 pos = hazard.transform.position;
