@@ -9,26 +9,29 @@ public class TerrainManager : MonoBehaviour
     /// <summary> Size of each tile </summary>
     public float tileSize = 30f;
 
+    /// <summary> The tile furthest from the camera </summary>
+    GameObject lastTile;
+
     Camera cam;
 
-	void Start ()
+    void Start()
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
-	}
-	
-	void Update ()
+    }
+
+    void Update()
     {
         RotateTiles();
-	}
+    }
 
     void RotateTiles()
     {
-        if(floorTiles.Count != 0)
+        if (floorTiles.Count != 0)
         {
             Vector3 camFwd = cam.transform.forward;
             Vector3 camToTile = (floorTiles[0].transform.position - cam.transform.position);
             // If the tile is behind the camera AND the distance from the tile and the camera is greater than the width of a tile
-            if((Vector3.Dot(camFwd, camToTile) < 0) &&
+            if ((Vector3.Dot(camFwd, camToTile) < 0) &&
                 (camToTile.magnitude > tileSize * 2))
             {
                 // Move the tile infront of the last tile in the array
@@ -36,6 +39,8 @@ public class TerrainManager : MonoBehaviour
                 Vector3 temp = floorTiles[0].transform.position;
                 temp.z = newZ;
                 floorTiles[0].transform.position = temp;
+                // Store the tile as the current tile at the end of the list
+                lastTile = floorTiles[0];
                 // Move the tile to the end of the list
                 floorTiles.Add(floorTiles[0]);
                 // Remove the tile from the beginning of the list
@@ -43,4 +48,6 @@ public class TerrainManager : MonoBehaviour
             }
         }
     }
+
+    public GameObject GetLastTile() { return lastTile; }
 }
