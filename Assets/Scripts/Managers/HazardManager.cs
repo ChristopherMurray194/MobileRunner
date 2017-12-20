@@ -15,6 +15,8 @@ public class HazardManager : MonoBehaviour
     /// <summary> The number of hazards to spawn per incremement </summary>
     public int spawnNum = 2;
 
+    float lastZ = 0f;
+
     TerrainManager terrainMgr;
     GameObject lastTile;
 
@@ -49,6 +51,7 @@ public class HazardManager : MonoBehaviour
         int hazardIndex = Random.Range(0, hazards.Length);
         // Get a random lane
         int laneIndex = Random.Range(0, lanes.Length);
+
         float tileZ = lastTile.transform.position.z;
         // Get a random Z value
         float randZ = Random.Range(tileZ, tileZ + tileSize);
