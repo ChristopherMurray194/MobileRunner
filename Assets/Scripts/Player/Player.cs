@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
     {
         MoveForward();
 
-        #if UNITY_STANDALONE || UNITY_WEBPLAYER
+        #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
 
             if(Input.GetKeyDown(KeyCode.A))
                 MoveLeft();

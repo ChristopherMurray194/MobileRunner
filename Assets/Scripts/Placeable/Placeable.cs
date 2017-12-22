@@ -6,25 +6,34 @@ public class Placeable : MonoBehaviour
 {
     Camera cam;
 
-	void Awake ()
+	protected virtual void Awake()
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+        gameObject.SetActive(false);
 	}
 	
-	void Update ()
+	protected virtual void Update()
     {
-        DestroySelf();
+        DeactivateSelf();
     }
 
-    void DestroySelf()
+    void DeactivateSelf()
     {
         Vector3 camFwd = cam.transform.forward;
         Vector3 camToObj = (transform.position - cam.transform.position);
         // If the object is behind the camera
         if (Vector3.Dot(camFwd, camToObj) < 0)
         {
-            // Destroy THIS object
-            Destroy(this.gameObject);
+            gameObject.GetComponent<Collider>().enabled = false;
+            gameObject.SetActive(false);
+        }
+    }
+
+    protected virtual void onTriggerEnter(Collider other)
+    {
+        if (other.tag == "Placeable")
+        {
+            // Do something
         }
     }
 }
