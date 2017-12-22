@@ -6,6 +6,11 @@ public class Player : MonoBehaviour
 {
     /// <summary> Movement speed of the player </summary>
     public float movementSpeed = 15f;
+    /// <summary> The minimum speed the player can move at </summary>
+    public float minimumSpeed = 5f;
+    /// <summary> The max speed the player can move at</summary>
+    public float maximumSpeed = 40f;
+    float initialSpeed = 1f;
 
     /// <summary> The increment at which the player moves left and right </summary>
     float moveIncrement = 7.5f;
@@ -15,7 +20,7 @@ public class Player : MonoBehaviour
     
 	void Start ()
     {
-		
+        initialSpeed = movementSpeed;
 	}
 	
 	void Update ()
@@ -66,6 +71,9 @@ public class Player : MonoBehaviour
         transform.position = pos;
     }
 
+    /// <summary>
+    /// Move the player to the next lane on the left
+    /// </summary>
     void MoveLeft()
     {
         Vector3 pos = transform.position;
@@ -82,6 +90,9 @@ public class Player : MonoBehaviour
         transform.position = pos;
     }
 
+    /// <summary>
+    /// Move the player to the next lane on the right
+    /// </summary>
     void MoveRight()
     {
         Vector3 pos = transform.position;
@@ -96,5 +107,33 @@ public class Player : MonoBehaviour
         }
 
         transform.position = pos;
+    }
+
+    /// <summary>
+    /// Decrease the player's speed by the given delta.
+    /// </summary>
+    /// <param name="deltaSpeed"></param>
+    public void DecreaseSpeed(float deltaSpeed)
+    {
+        if(!(movementSpeed - deltaSpeed < minimumSpeed))
+            movementSpeed -= deltaSpeed;
+    }
+
+    /// <summary>
+    /// Increase the player's speed by the given delta.
+    /// </summary>
+    /// <param name="deltaSpeed"></param>
+    public void IncreaseSpeed(float deltaSpeed)
+    {
+        if (!(movementSpeed + deltaSpeed > maximumSpeed))
+            movementSpeed += deltaSpeed;
+    }
+
+    /// <summary>
+    /// Reset the player's speed to what it was at the beginning of the game.
+    /// </summary>
+    public void ResetSpeed()
+    {
+        movementSpeed = initialSpeed;
     }
 }
