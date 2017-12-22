@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HazardManager : MonoBehaviour
+public class PlaceableManager : MonoBehaviour
 {
-    public ObjectPool[] hazardPools;
+    public ObjectPool[] placeablePools;
 
     /// <summary> The size of each tile </summary>
     public float tileSize = 30f;
@@ -20,9 +20,9 @@ public class HazardManager : MonoBehaviour
 
     List<Vector2> usedPositions = new List<Vector2>();
 
-    /// <summary> The delay in seconds between hazard spawns </summary>
+    /// <summary> The delay in seconds between placeable spawns </summary>
     public float spawnDelay = 2f;
-    /// <summary> The number of hazards to spawn each update call </summary>
+    /// <summary> The number of placeables to spawn each update call </summary>
     public int spawnNum = 2;
 
     TerrainManager terrainMgr;
@@ -34,23 +34,23 @@ public class HazardManager : MonoBehaviour
     }
 
     GameObject lastTile;
-    
+
     float timer = 0f;
 
-	void Start ()
+    void Start()
     {
         terrainMgr = GameObject.Find("TerrainManager").GetComponent<TerrainManager>();
         _zIncrement = tileSize / zIncrements;
-	}
-	
-	void Update ()
+    }
+
+    void Update()
     {
         // Always keep the last tile updated
         lastTile = terrainMgr.GetLastTile();
-        
-        if(timer > spawnDelay)
+
+        if (timer > spawnDelay)
         {
-            for(int i = 0; i < spawnNum; i++)
+            for (int i = 0; i < spawnNum; i++)
                 PositionHazard();
 
             timer = 0f;
@@ -59,26 +59,26 @@ public class HazardManager : MonoBehaviour
         {
             timer += Time.deltaTime;
         }
-	}
+    }
 
     void PositionHazard()
     {
-        // Get a random hazard pool
-        int hazardPoolIndex = Random.Range(0, hazardPools.Length);
-        ObjectPool tempPool = hazardPools[hazardPoolIndex];
-        // Get a random hazard from the pool
-        int hazardIndex = Random.Range(0, tempPool.GetPooledObjects().Count);
+        // Get a random placeable pool
+        int placeablePoolIndex = Random.Range(0, placeablePools.Length);
+        ObjectPool tempPool = placeablePools[placeablePoolIndex];
+        // Get a random placeable from the pool
+        int placeableIndex = Random.Range(0, tempPool.GetPooledObjects().Count);
 
-        GameObject hazard = tempPool.GetPooledObjects()[hazardIndex];
+        GameObject placeable = tempPool.GetPooledObjects()[placeableIndex];
         // If the object is not active it is behind the camera and can be moved
-        if (!hazard.activeSelf)
+        if (!placeable.activeSelf)
         {
             // Reactivate the object
-            hazard.SetActive(true);
-            Vector3 pos = hazard.transform.position;
+            placeable.SetActive(true);
+            Vector3 pos = placeable.transform.position;
             int laneIndex, randomRow;
             float tileZ;
-            
+
             // Get a random lane
             laneIndex = Random.Range(0, lanes.Length);
             // Get a random row
@@ -93,12 +93,12 @@ public class HazardManager : MonoBehaviour
 
             // Add the X and Z values to the currently used positions list
             usedPositions.Add(new Vector2(pos.x, pos.z));
-            hazard.transform.position = pos;
+            placeable.transform.position = pos;
 
-            // Once we have moved the hazard, enable the collider so we can check for collisions
-            hazard.GetComponent<Collider>().enabled = true;
+            // Once we have moved the placeable, enable the collider so we can check for collisions
+            placeable.GetComponent<Collider>().enabled = true;
 
-            _spawnedObject = hazard;
+            _spawnedObject = placeable;
         }
     }
 }

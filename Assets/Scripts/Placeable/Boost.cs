@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hazard : Placeable
+public class Boost : Placeable
 {
-    PlaceableManager hazardMgr;
 
-	protected virtual void Awake ()
+	protected virtual void Awake()
     {
         base.Awake();
-        
-	}
+    }
 	
-	protected void Update ()
+	protected virtual void Update()
     {
-        base.Update();
+        base.Update();	
 	}
 
     protected virtual void OnTriggerEnter(Collider other)

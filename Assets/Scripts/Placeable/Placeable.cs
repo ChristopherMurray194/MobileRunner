@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Placeable : MonoBehaviour
 {
+    PlaceableManager placeableMgr;
     Camera cam;
 
 	protected virtual void Awake()
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+        placeableMgr = GameObject.Find("PlaceableManager").GetComponent<PlaceableManager>();
         gameObject.SetActive(false);
 	}
 	
@@ -29,11 +31,16 @@ public class Placeable : MonoBehaviour
         }
     }
 
-    protected virtual void onTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Placeable")
+        /* If this object collides with another placeable object &&
+          other is the most recently spawned object */
+        if (other.tag == "Placeable" && other.gameObject.Equals(placeableMgr.spawnedObject))
         {
-            // Do something
+            // Move the other object up one increment on the Z axis
+            Vector3 temp = other.gameObject.transform.position;
+            temp.z += placeableMgr.zIncrement;
+            other.gameObject.transform.position = temp;
         }
     }
 }
