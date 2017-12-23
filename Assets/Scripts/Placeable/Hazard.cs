@@ -5,20 +5,20 @@ using UnityEngine;
 public class Hazard : Placeable
 {
 
-	protected virtual void Awake ()
+    protected override void Awake()
     {
         base.Awake();
-        
-	}
-	
-	protected void Update ()
+
+    }
+
+    protected override void Update()
     {
         base.Update();
-	}
+    }
 
-    protected virtual void OnTriggerEnter(Collider other)
+    protected override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
-        
+
     }
 }

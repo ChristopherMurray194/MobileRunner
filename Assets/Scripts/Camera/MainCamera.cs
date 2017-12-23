@@ -11,18 +11,15 @@ public class MainCamera : MonoBehaviour
     /// <summary> Distance vector to maintain from the target </summary>
     Vector3 distance;
 
-    Camera cam;
-    
-	void Start()
+    void Start()
     {
         distance = transform.position - target.position;
-        cam = GetComponent<Camera>();
-	}
-	
-	void Update()
+    }
+
+    void Update()
     {
         FollowPlayer();
-	}
+    }
 
     void FollowPlayer()
     {

@@ -11,6 +11,11 @@ public class Player : MonoBehaviour
     /// <summary> The max speed the player can move at</summary>
     public float maximumSpeed = 40f;
     float initialSpeed = 1f;
+    float speedTimer = 0f;
+    /// <summary> The time in seconds to have passed since the last speed boost or hazard has been hit before the speed returns to normal </summary>
+    public float timerDelay = 5f;
+    /// <summary> The timer used for reverting the speed back to its original value every x seconds </summary>
+    float speedRevertTimer = 0f;
 
     /// <summary> The increment at which the player moves left and right </summary>
     float moveIncrement = 7.5f;
@@ -22,8 +27,8 @@ public class Player : MonoBehaviour
 
     /// <summary> Point on screen where the player initially touches </summary>
     Vector2 touchOrigin = -Vector2.one;
-    
-	void Start ()
+
+    void Start()
     {
         rb = GetComponent<Rigidbody>();
         boxCollder = GetComponent<BoxCollider>();
@@ -34,6 +39,15 @@ public class Player : MonoBehaviour
     void Update()
     {
         MoveForward();
+        
+        if(speedTimer > timerDelay)
+        {
+            revertSpeed();
+        }
+        else
+        {
+            speedTimer += Time.deltaTime;
+        }
 
 #if UNITY_STANDALONE || UNITY_WEBPLAYER
 
@@ -134,7 +148,7 @@ public class Player : MonoBehaviour
     {
         Vector3 pos = transform.position;
         // Ensure we do not go off the track
-        if(!(pos.x - moveIncrement < -26.25f))
+        if (!(pos.x - moveIncrement < -26.25f))
         {
             pos.x -= moveIncrement;
         }
@@ -164,7 +178,7 @@ public class Player : MonoBehaviour
 
         transform.position = pos;
     }
-    
+
     /// <summary>
     /// Jump but only if the player is touching the floor
     /// </summary>
@@ -195,8 +209,10 @@ public class Player : MonoBehaviour
     /// <param name="deltaSpeed"></param>
     public void DecreaseSpeed(float deltaSpeed)
     {
-        if(!(movementSpeed - deltaSpeed < minimumSpeed))
+        if (!(movementSpeed - deltaSpeed < minimumSpeed))
             movementSpeed -= deltaSpeed;
+        // A speed hazard has been hit reset the speed timer
+        speedTimer = 0f;
     }
 
     /// <summary>
@@ -207,13 +223,33 @@ public class Player : MonoBehaviour
     {
         if (!(movementSpeed + deltaSpeed > maximumSpeed))
             movementSpeed += deltaSpeed;
+        // A speed boost has been hit reset the speed timer
+        speedTimer = 0f;
     }
 
     /// <summary>
-    /// Reset the player's speed to what it was at the beginning of the game.
+    /// If after a certain number of seconds the player has not hit a speed boost or hazard,
+    /// revert to the original speed
     /// </summary>
-    public void ResetSpeed()
+    void revertSpeed()
     {
-        movementSpeed = initialSpeed;
+        // Every second
+        if (speedRevertTimer > 1f)
+        {
+            // If the player is moving faster
+            if (movementSpeed > initialSpeed)
+                // Reduce speed
+                movementSpeed--;
+            // If the player is moving slower
+            else if (movementSpeed < initialSpeed)
+                // Increase speed
+                movementSpeed++;
+            // Reset the timer
+            speedRevertTimer = 0f;
+        }
+        else
+        {
+            speedRevertTimer += Time.deltaTime;
+        }
     }
 }

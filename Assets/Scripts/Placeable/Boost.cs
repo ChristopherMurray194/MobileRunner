@@ -5,19 +5,19 @@ using UnityEngine;
 public class Boost : Placeable
 {
 
-	protected virtual void Awake()
+    protected override void Awake()
     {
         base.Awake();
     }
-	
-	protected virtual void Update()
-    {
-        base.Update();	
-	}
 
-    protected virtual void OnTriggerEnter(Collider other)
+    protected override void Update()
+    {
+        base.Update();
+    }
+
+    protected override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
-        
+
     }
 }

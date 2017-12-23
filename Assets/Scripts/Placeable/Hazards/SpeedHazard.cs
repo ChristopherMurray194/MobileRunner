@@ -7,17 +7,17 @@ public class SpeedHazard : Hazard
     /// <summary> The change in the player speed </summary>
     public float speedDelta = 2f;
 
-    protected virtual void Awake()
+    protected override void Awake()
     {
         base.Awake();
     }
 
-    protected virtual void Update()
+    protected override void Update()
     {
         base.Update();
     }
 
-    protected virtual void OnTriggerEnter(Collider other)
+    protected override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
 
