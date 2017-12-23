@@ -30,12 +30,12 @@ public class Player : MonoBehaviour
         floorMask = LayerMask.GetMask("Floor");
         initialSpeed = movementSpeed;
     }
-	
-	void Update ()
+
+    void Update()
     {
         MoveForward();
 
-        #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
+#if UNITY_STANDALONE || UNITY_WEBPLAYER
 
             // Can only change lanes if the player is touching the floor
             if (isGrounded())
@@ -47,75 +47,77 @@ public class Player : MonoBehaviour
                     MoveRight();
             }
 
-        #elif UNITY_ANDROID
-            if(Input.touchCount > 0)
+#elif UNITY_ANDROID
+        if (Input.touchCount > 0)
+        {
+            // Store first touch detected
+            Touch touch = Input.touches[0];
+            // If this is the beginning of a touch on the screen
+            if (touch.phase == TouchPhase.Began)
             {
-                // Store first touch detected
-                Touch touch = Input.touches[0];
-                // If this is the beginning of a touch on the screen
-                if(touch.phase == TouchPhase.Began)
+                // Store as the intial touch
+                touchOrigin = touch.position;
+            }
+            // If the touch has ended
+            else if (touch.phase == TouchPhase.Ended && touchOrigin.x >= 0)
+            {
+                Vector2 touchEnd = touch.position;
+                // Get the X direction of the touch
+                float x = touchEnd.x - touchOrigin.x;
+                float y = touchEnd.y - touchOrigin.y;
+                // Revert the touch origin X to offscreen
+                touchOrigin.x = -1;
+                touchOrigin.y = -1;
+
+                if (isGrounded() && Mathf.Abs(x) > Mathf.Abs(y))
                 {
-                    // Store as the intial touch
-                    touchOrigin = touch.position;
-                }
-                // If the touch has ended and is inside the bounds of the screen
-                else if(touch.phase == TouchPhase.Ended && touchOrigin.x >= 0)
-                {
-                    Vector2 touchEnd = touch.position;
-                    // Get the X direction of the touch
-                    float x = touchEnd.x - touchOrigin.x;
-                    // Revert the touch origin X to offscreen
-                    touchOrigin.x = -1;
-                
-                    if(isGrounded())
-                    {   
-                        if(x > 0)
-                            MoveRight();
-                        else if(x < 0)
-                            MoveLeft();
-                    }
+                    if (x > 0)
+                        MoveRight();
+                    else if (x < 0)
+                        MoveLeft();
                 }
             }
-        #endif
+        }
+#endif
     }
 
     void FixedUpdate()
     {
-        #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
+        // If the player is falling
+        if (rb.velocity.y < 0)
+        {
+            // Fall faster
+            rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1f) * Time.deltaTime;
+        }
+
+#if UNITY_STANDALONE || UNITY_WEBPLAYER
+
             if (Input.GetKeyDown(KeyCode.Space))
                 Jump();
 
-            // If the player is falling
-            if (rb.velocity.y < 0)
+#elif UNITY_ANDROID
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.touches[0];
+            if (touch.phase == TouchPhase.Began)
             {
-                // Fall faster
-                rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1f) * Time.deltaTime;
+                touchOrigin = touch.position;
             }
-        #elif UNITY_ANDROID
-            if(Input.touchCount > 0)
-                {
-                    // Store first touch detected
-                    Touch touch = Input.touches[0];
-                    // If this is the beginning of a touch on the screen
-                    if(touch.phase == TouchPhase.Began)
-                    {
-                        // Store as the intial touch
-                        touchOrigin = touch.position;
-                    }
-                    // If the touch has ended and is inside the bounds of the screen
-                    else if(touch.phase == TouchPhase.Ended && touchOrigin.y >= 0)
-                    {
-                        Vector2 touchEnd = touch.position;
+            else if (touch.phase == TouchPhase.Ended && touchOrigin.y >= 0)
+            {
+                Vector2 touchEnd = touch.position;
 
-                        float y = touchEnd.y - touchOrigin.y;
-                        touchOrigin.y = -1;
+                float x = touchEnd.x - touchOrigin.x;
+                float y = touchEnd.y - touchOrigin.y;
+                //touchOrigin.x = -1;
+                //touchOrigin.y = -1;
 
-                        // If the swipe is up
-                        if(y < 0)
-                            Jump();
-                    }
-                }
-        #endif
+                // If the swipe is up
+                if (Mathf.Abs(y) > Mathf.Abs(x) && y > 0)
+                    Jump();
+            }
+        }
+#endif
     }
 
     void MoveForward()
