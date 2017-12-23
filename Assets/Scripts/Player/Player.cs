@@ -7,21 +7,29 @@ public class Player : MonoBehaviour
     /// <summary> Movement speed of the player </summary>
     public float movementSpeed = 15f;
     /// <summary> The minimum speed the player can move at </summary>
-    public float minimumSpeed = 5f;
+    public float minimumSpeed = 10f;
     /// <summary> The max speed the player can move at</summary>
     public float maximumSpeed = 40f;
     float initialSpeed = 1f;
 
     /// <summary> The increment at which the player moves left and right </summary>
     float moveIncrement = 7.5f;
+    Rigidbody rb;
+    BoxCollider boxCollder;
+    int floorMask;
+    public float fallMultiplier = 4f;
+    public float jumpHeight = 3f;
 
     /// <summary> Point on screen where the player initially touches </summary>
     Vector2 touchOrigin = -Vector2.one;
     
 	void Start ()
     {
+        rb = GetComponent<Rigidbody>();
+        boxCollder = GetComponent<BoxCollider>();
+        floorMask = LayerMask.GetMask("Floor");
         initialSpeed = movementSpeed;
-	}
+    }
 	
 	void Update ()
     {
@@ -29,11 +37,15 @@ public class Player : MonoBehaviour
 
         #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
 
-            if(Input.GetKeyDown(KeyCode.A))
-                MoveLeft();
+            // Can only change lanes if the player is touching the floor
+            if (isGrounded())
+            {
+                if (Input.GetKeyDown(KeyCode.A))
+                    MoveLeft();
 
-            if (Input.GetKeyDown(KeyCode.D))
-                MoveRight();
+                if (Input.GetKeyDown(KeyCode.D))
+                    MoveRight();
+            }
 
         #elif UNITY_ANDROID
             if(Input.touchCount > 0)
@@ -55,12 +67,54 @@ public class Player : MonoBehaviour
                     // Revert the touch origin X to offscreen
                     touchOrigin.x = -1;
                 
-                    if(x > 0)
-                        MoveRight();
-                    else if(x < 0)
-                        MoveLeft();
+                    if(isGrounded())
+                    {   
+                        if(x > 0)
+                            MoveRight();
+                        else if(x < 0)
+                            MoveLeft();
+                    }
                 }
             }
+        #endif
+    }
+
+    void FixedUpdate()
+    {
+        #if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
+            if (Input.GetKeyDown(KeyCode.Space))
+                Jump();
+
+            // If the player is falling
+            if (rb.velocity.y < 0)
+            {
+                // Fall faster
+                rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1f) * Time.deltaTime;
+            }
+        #elif UNITY_ANDROID
+            if(Input.touchCount > 0)
+                {
+                    // Store first touch detected
+                    Touch touch = Input.touches[0];
+                    // If this is the beginning of a touch on the screen
+                    if(touch.phase == TouchPhase.Began)
+                    {
+                        // Store as the intial touch
+                        touchOrigin = touch.position;
+                    }
+                    // If the touch has ended and is inside the bounds of the screen
+                    else if(touch.phase == TouchPhase.Ended && touchOrigin.y >= 0)
+                    {
+                        Vector2 touchEnd = touch.position;
+
+                        float y = touchEnd.y - touchOrigin.y;
+                        touchOrigin.y = -1;
+
+                        // If the swipe is up
+                        if(y < 0)
+                            Jump();
+                    }
+                }
         #endif
     }
 
@@ -107,6 +161,30 @@ public class Player : MonoBehaviour
         }
 
         transform.position = pos;
+    }
+    
+    /// <summary>
+    /// Jump but only if the player is touching the floor
+    /// </summary>
+    void Jump()
+    {
+        // Only jump if touching the ground
+        if (isGrounded())
+        {
+            rb.velocity = new Vector3(0f, Mathf.Sqrt(2 * Mathf.Abs(Physics.gravity.y) * jumpHeight), 0f);
+        }
+    }
+
+    /// <summary>
+    /// Returns true if the player is touching the floor, false otherwise
+    /// </summary>
+    /// <returns></returns>
+    bool isGrounded()
+    {
+        // If the player is touching the floor
+        if (Physics.CheckBox(boxCollder.bounds.center, boxCollder.bounds.extents, boxCollder.transform.rotation, floorMask))
+            return true;
+        return false;
     }
 
     /// <summary>

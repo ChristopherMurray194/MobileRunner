@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Hazard : Placeable
 {
-    PlaceableManager hazardMgr;
 
 	protected virtual void Awake ()
     {
