@@ -17,6 +17,13 @@ public class Player : MonoBehaviour
     /// <summary> The timer used for reverting the speed back to its original value every x seconds </summary>
     float speedRevertTimer = 0f;
 
+    /// <summary> The health of the player </summary>
+    int _currentHealth = 100;
+    public int currentHealth
+    {
+        get { return _currentHealth; }
+    }
+
     /// <summary> The increment at which the player moves left and right </summary>
     float moveIncrement = 7.5f;
     Rigidbody rb;
@@ -251,5 +258,19 @@ public class Player : MonoBehaviour
         {
             speedRevertTimer += Time.deltaTime;
         }
+    }
+
+    /// <summary>
+    /// Reduce the player's health by the passed amount.
+    /// </summary>
+    /// <param name="damageDelta"></param>
+    public void DamagePlayer(int damageDelta)
+    {
+        if (_currentHealth - damageDelta > 0)
+            _currentHealth -= damageDelta;
+        else
+            _currentHealth = 0;
+
+        // Notify the player visually that damage has been dealt
     }
 }
