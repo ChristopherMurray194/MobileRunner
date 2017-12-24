@@ -17,10 +17,8 @@ public class SpeedHazard : Hazard
         base.Update();
     }
 
-    protected override void OnTriggerEnter(Collider other)
+    protected void OnTriggerEnter(Collider other)
     {
-        base.OnTriggerEnter(other);
-
         if (other.tag == "Player")
         {
             Player playerScript = other.GetComponent<Player>();

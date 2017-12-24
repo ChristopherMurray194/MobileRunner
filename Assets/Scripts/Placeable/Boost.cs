@@ -14,10 +14,4 @@ public class Boost : Placeable
     {
         base.Update();
     }
-
-    protected override void OnTriggerEnter(Collider other)
-    {
-        base.OnTriggerEnter(other);
-
-    }
 }

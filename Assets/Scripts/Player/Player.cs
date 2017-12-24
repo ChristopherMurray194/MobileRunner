@@ -49,7 +49,7 @@ public class Player : MonoBehaviour
             speedTimer += Time.deltaTime;
         }
 
-#if UNITY_STANDALONE || UNITY_WEBPLAYER
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
 
             // Can only change lanes if the player is touching the floor
             if (isGrounded())
@@ -104,7 +104,7 @@ public class Player : MonoBehaviour
             rb.velocity += Vector3.up * Physics.gravity.y * (fallMultiplier - 1f) * Time.deltaTime;
         }
 
-#if UNITY_STANDALONE || UNITY_WEBPLAYER
+#if UNITY_EDITOR || UNITY_STANDALONE || UNITY_WEBPLAYER
 
             if (Input.GetKeyDown(KeyCode.Space))
                 Jump();

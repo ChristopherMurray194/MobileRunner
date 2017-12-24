@@ -26,21 +26,8 @@ public class Placeable : MonoBehaviour
         // If the object is behind the camera
         if (Vector3.Dot(camFwd, camToObj) < 0)
         {
-            gameObject.GetComponent<Collider>().enabled = false;
+            placeableMgr.removePosFromList(new Vector2(transform.position.x, transform.position.z));
             gameObject.SetActive(false);
-        }
-    }
-
-    protected virtual void OnTriggerEnter(Collider other)
-    {
-        /* If this object collides with another placeable object &&
-          other is the most recently spawned object */
-        if (other.tag == "Placeable" && other.gameObject.Equals(placeableMgr.spawnedObject))
-        {
-            // Move the other object up one increment on the Z axis
-            Vector3 temp = other.gameObject.transform.position;
-            temp.z += placeableMgr.zIncrement;
-            other.gameObject.transform.position = temp;
         }
     }
 }

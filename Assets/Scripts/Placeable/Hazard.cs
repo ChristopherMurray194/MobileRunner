@@ -15,10 +15,4 @@ public class Hazard : Placeable
     {
         base.Update();
     }
-
-    protected override void OnTriggerEnter(Collider other)
-    {
-        base.OnTriggerEnter(other);
-
-    }
 }

@@ -26,13 +26,14 @@ public class PlaceableManager : MonoBehaviour
     public int spawnNum = 2;
 
     TerrainManager terrainMgr;
+    /*
     /// <summary> The most recently spawned object </summary>
     GameObject _spawnedObject;
     public GameObject spawnedObject
     {
         get { return _spawnedObject; }
     }
-
+    */
     GameObject lastTile;
 
     float timer = 0f;
@@ -91,14 +92,22 @@ public class PlaceableManager : MonoBehaviour
             // Get the Z value
             pos.z = tileZ + (_zIncrement * randomRow);
 
+            // If this position is already being used
+            if (usedPositions.Contains(new Vector2(pos.x, pos.z)))
+                return; // We cannot place here so exit the function.
+
             // Add the X and Z values to the currently used positions list
             usedPositions.Add(new Vector2(pos.x, pos.z));
             placeable.transform.position = pos;
-
-            // Once we have moved the placeable, enable the collider so we can check for collisions
-            placeable.GetComponent<Collider>().enabled = true;
-
-            _spawnedObject = placeable;
         }
+    }
+
+    /// <summary>
+    /// Remove the passed position form the list of used positions.
+    /// </summary>
+    /// <param name="pos"></param>
+    public void removePosFromList(Vector2 pos)
+    {
+        usedPositions.Remove(pos);
     }
 }
