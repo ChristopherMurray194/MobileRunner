@@ -290,6 +290,8 @@ public class Player : MonoBehaviour
     void Death()
     {
         isDead = true;
+        // Stop animating
+        gameObject.GetComponent<Animator>().enabled = false;
         this.enabled = false;
     }
 }
