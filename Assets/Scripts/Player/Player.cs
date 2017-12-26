@@ -23,6 +23,13 @@ public class Player : MonoBehaviour
     {
         get { return _currentHealth; }
     }
+    bool isDead = false;
+    public bool IsDead
+    {
+        get { return isDead; }
+        set { isDead = value; }
+    }
+
 
     /// <summary> The increment at which the player moves left and right </summary>
     float moveIncrement = 7.5f;
@@ -272,5 +279,17 @@ public class Player : MonoBehaviour
             _currentHealth = 0;
 
         // Notify the player visually that damage has been dealt
+
+        if (_currentHealth <= 0)
+            Death();
+    }
+
+    /// <summary>
+    /// Handles what should happen when to the player when it dies.
+    /// </summary>
+    void Death()
+    {
+        isDead = true;
+        this.enabled = false;
     }
 }
