@@ -19,6 +19,7 @@ public class GameStateManager : MonoBehaviour
 	
 	void Update ()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.P))
         {
             if (!isPaused)
@@ -26,6 +27,7 @@ public class GameStateManager : MonoBehaviour
             else if (isPaused)
                 ResumeGame();
         }
+        */
 
         if (player.IsDead)
         {
@@ -98,5 +100,16 @@ public class GameStateManager : MonoBehaviour
             Debug.Log("You are missing one or more managers. Alternatively check the spelling of the game object name.\n" + e);
         }
         //=============================================
+    }
+
+    /// <summary>
+    /// The function to be invoked by the UI toggle to pause and unpause the game.
+    /// </summary>
+    public void PauseToggle()
+    {
+        if (!isPaused)
+            PauseGame();
+        else if (isPaused)
+            ResumeGame();
     }
 }
