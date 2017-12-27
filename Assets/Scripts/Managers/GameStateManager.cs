@@ -7,6 +7,7 @@ using System;
 public class GameStateManager : MonoBehaviour
 {
     public Player player;
+    public BaseCharacter[] enemies;
     float restatTimer = 0f;
 
     /// <summary> Is the game paused? </summary>
@@ -31,7 +32,7 @@ public class GameStateManager : MonoBehaviour
 
         if (player.IsDead)
         {
-            DisableScene();
+            PauseGame();
 
             restatTimer += Time.deltaTime;
 
@@ -48,6 +49,17 @@ public class GameStateManager : MonoBehaviour
             // Stop spawning placeable objects
             PlaceableManager placeableManager = GameObject.Find("PlaceableManager").GetComponent<PlaceableManager>();
             placeableManager.enabled = false;
+
+            // Disable all other characters
+            if (enemies != null)
+            {
+                foreach (BaseCharacter b in enemies)
+                {
+                    b.enabled = false;
+                    b.gameObject.GetComponent<Rigidbody>().Sleep();
+                    b.GetComponent<Animator>().enabled = false;
+                }
+            }
         }
         catch (NullReferenceException e)
         {
@@ -87,6 +99,19 @@ public class GameStateManager : MonoBehaviour
         // Allow the player to resume animating
         player.GetComponent<Animator>().enabled = true;
         //===============================================
+
+        //======= UNFREEZE ALL OTHER CHARACTERS ==========
+        // Disable all other characters
+        if (enemies != null)
+        {
+            foreach (BaseCharacter b in enemies)
+            {
+                b.enabled = true;
+                b.gameObject.GetComponent<Rigidbody>().WakeUp();
+                b.GetComponent<Animator>().enabled = true;
+            }
+        }
+        //================================================
 
         //======== ENABLE MANAGERS======================
         try
