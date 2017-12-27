@@ -106,7 +106,7 @@ public class PlaceableManager : MonoBehaviour
     /// Remove the passed position form the list of used positions.
     /// </summary>
     /// <param name="pos"></param>
-    public void removePosFromList(Vector2 pos)
+    public void ReleasePosition(Vector2 pos)
     {
         usedPositions.Remove(pos);
     }
