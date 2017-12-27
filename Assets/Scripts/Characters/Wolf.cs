@@ -28,11 +28,11 @@ public class Wolf : BaseCharacter
          * This is to stop the wolf falling off the map
          * because it is going too slow.
          */
-        if(player.movementSpeed > this.movementSpeed)
+        if(Mathf.Abs(player.movementSpeed - this.movementSpeed) > 2f)
         {
             Vector3 tempPos = transform.position;
             tempPos.z = Mathf.Abs(player.transform.position.z) - 12f;
             transform.position = tempPos;
         }
-	}
+    }
 }

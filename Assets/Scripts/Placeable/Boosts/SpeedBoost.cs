@@ -24,5 +24,10 @@ public class SpeedBoost : Boost
             Player playerScript = other.GetComponent<Player>();
             playerScript.IncreaseSpeed(speedDelta);
         }
+        else if(other.tag == "Enemy")
+        {
+            BaseCharacter characterScript = other.GetComponent<BaseCharacter>();
+            characterScript.IncreaseSpeed(.2f);
+        }
     }
 }

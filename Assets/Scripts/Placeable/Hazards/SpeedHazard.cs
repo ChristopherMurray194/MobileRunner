@@ -24,5 +24,10 @@ public class SpeedHazard : Hazard
             Player playerScript = other.GetComponent<Player>();
             playerScript.DecreaseSpeed(speedDelta);
         }
+        else if (other.tag == "Enemy")
+        {
+            BaseCharacter characterScript = other.GetComponent<BaseCharacter>();
+            characterScript.DecreaseSpeed(.2f);
+        }
     }
 }

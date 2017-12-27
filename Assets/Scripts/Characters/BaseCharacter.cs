@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class BaseCharacter : MonoBehaviour
@@ -16,6 +17,8 @@ public class BaseCharacter : MonoBehaviour
     public float timerDelay = 5f;
     /// <summary> The timer used for reverting the speed back to its original value every x seconds </summary>
     float speedRevertTimer = 0f;
+
+    bool displayInfo = false;
 
     protected virtual void Start()
     {
@@ -91,5 +94,28 @@ public class BaseCharacter : MonoBehaviour
         {
             speedRevertTimer += Time.deltaTime;
         }
+    }
+
+    /// <summary>
+    /// USED FOR DEBUGGING PURPOSES
+    /// </summary>
+    private void OnGUI()
+    {
+        displayDebuggingInfo();
+    }
+
+    void displayDebuggingInfo()
+    {
+        if (displayInfo)
+        {
+            Handles.Label(transform.position + Vector3.up * 2,
+                "Z position is: " + transform.position.z.ToString() + "\n" + "Speed is: " + movementSpeed);
+        }
+    }
+
+    public void toggleDebugging()
+    {
+        if (!displayInfo) displayInfo = true;
+        else displayInfo = false;
     }
 }
