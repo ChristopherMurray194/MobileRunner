@@ -13,16 +13,34 @@ public class TerrainManager : MonoBehaviour
     GameObject lastTile;
 
     Camera cam;
+    Player player;
 
     void Start()
     {
         cam = GameObject.Find("Main Camera").GetComponent<Camera>();
+        player = GameObject.Find("Player").GetComponent<Player>();
         lastTile = floorTiles[floorTiles.Count - 1];
     }
 
     void Update()
     {
         RotateTiles();
+
+        MoveForward();
+    }
+
+    /// <summary>
+    /// Move the tiles back, giving the illusion the character,
+    /// is moving forward.
+    /// </summary>
+    void MoveForward()
+    {
+        foreach (GameObject tile in floorTiles)
+        {
+            Vector3 pos = tile.transform.position;
+            pos.z -= player.movementSpeed * Time.deltaTime;
+            tile.transform.position = pos;
+        }
     }
 
     void RotateTiles()

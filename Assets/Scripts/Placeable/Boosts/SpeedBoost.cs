@@ -7,9 +7,13 @@ public class SpeedBoost : Boost
     /// <summary> The change in the player speed </summary>
     public float speedDelta = 2f;
 
+    CharacterManager characterMgr;
+
     protected override void Awake()
     {
         base.Awake();
+
+        characterMgr = GameObject.Find("CharacterManager").GetComponent<CharacterManager>();
     }
 
     protected override void Update()
@@ -21,13 +25,12 @@ public class SpeedBoost : Boost
     {
         if (other.tag == "Player")
         {
-            Player playerScript = other.GetComponent<Player>();
-            playerScript.IncreaseSpeed(speedDelta);
+            // Increase the speed of all characters including the player
+            characterMgr.IncreasePlayerSpeed(speedDelta);
         }
         else if(other.tag == "Enemy")
         {
-            BaseCharacter characterScript = other.GetComponent<BaseCharacter>();
-            characterScript.IncreaseSpeed(.2f);
+            characterMgr.IncreaseOtherCharacterSpeed(.2f, other);
         }
     }
 }

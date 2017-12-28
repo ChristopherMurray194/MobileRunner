@@ -11,6 +11,10 @@ public class BaseCharacter : MonoBehaviour
     /// <summary> The max speed the player can move at</summary>
     public float maximumSpeed = 40f;
     float initialSpeed = 1f;
+    public float IntialSpeed
+    {
+        get { return initialSpeed; }
+    }
     float speedTimer = 0f;
     /// <summary> The time in seconds to have passed since the last speed boost or hazard has been hit before the speed returns to normal </summary>
     public float timerDelay = 5f;
@@ -24,7 +28,7 @@ public class BaseCharacter : MonoBehaviour
 	
 	protected virtual void Update()
     {
-        MoveForward();
+        //MoveForward();
 
         if (speedTimer > timerDelay)
         {

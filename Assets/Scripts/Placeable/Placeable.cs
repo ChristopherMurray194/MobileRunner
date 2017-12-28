@@ -27,6 +27,8 @@ public class Placeable : MonoBehaviour
         if (Vector3.Dot(camFwd, camToObj) < 0)
         {
             placeableMgr.ReleasePosition(new Vector2(transform.position.x, transform.position.z));
+            // Detach from the current parent tile
+            transform.parent = null;
             gameObject.SetActive(false);
         }
     }

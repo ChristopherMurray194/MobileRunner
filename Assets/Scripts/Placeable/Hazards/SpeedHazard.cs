@@ -7,9 +7,12 @@ public class SpeedHazard : Hazard
     /// <summary> The change in the player speed </summary>
     public float speedDelta = 2f;
 
+    CharacterManager characterMgr;
+
     protected override void Awake()
     {
         base.Awake();
+        characterMgr = GameObject.Find("CharacterManager").GetComponent<CharacterManager>();
     }
 
     protected override void Update()
@@ -26,8 +29,7 @@ public class SpeedHazard : Hazard
         }
         else if (other.tag == "Enemy")
         {
-            BaseCharacter characterScript = other.GetComponent<BaseCharacter>();
-            characterScript.DecreaseSpeed(.2f);
+            characterMgr.DecreaseOtherCharacterSpeed(.2f, other);
         }
     }
 }

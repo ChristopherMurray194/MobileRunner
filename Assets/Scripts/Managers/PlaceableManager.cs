@@ -99,6 +99,8 @@ public class PlaceableManager : MonoBehaviour
             // Add the X and Z values to the currently used positions list
             usedPositions.Add(new Vector2(pos.x, pos.z));
             placeable.transform.position = pos;
+            // Ensure the placeable transform moves with its parent tile
+            placeable.transform.SetParent(lastTile.transform);
         }
     }
 
